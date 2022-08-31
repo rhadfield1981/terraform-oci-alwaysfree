@@ -6,7 +6,7 @@ data "oci_identity_tenancy" "root-compartment" {
 # Create a compartment to hold all our kubernetes resources
 resource "oci_identity_compartment" "kube-compartment" {
     compartment_id = data.oci_identity_tenancy.root-compartment.id
-    description = "${var.compartment_description}"
-    name = "${var.compartment_name}"
+    description = "${var.compartment-description}"
+    name = "${var.compartment-name}"
 }
 
