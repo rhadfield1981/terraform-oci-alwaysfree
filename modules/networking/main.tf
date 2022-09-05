@@ -42,6 +42,11 @@ resource "oci_core_subnet" "public-subnet" {
 
 }
 
+resource "oci_core_route_table_attachment" "rta" {
+    subnet_id = oci_core_subnet.public-subnet.id
+    route_table_id = oci_core_route_table.rt.id
+} 
+
 resource "oci_core_subnet" "private-subnet" {
 compartment_id = var.compartment-id
     vcn_id = oci_core_vcn.vcn.id
