@@ -1,16 +1,16 @@
 variable "compartment-id" {
-    Description = "Compartment to host networking components"
+    description = "Compartment to host networking components"
     type = string
 }
 
 variable "display-name" {
-    Description = "Display name for resources"
+    description = "Display name for resources"
     type = string
     default = "kubernetes"
 }
 
 variable "vcn-cidr-block" {
-    Description = "CIDR Block for the VCN"
+    description = "CIDR Block for the VCN"
     type = string
     default = "10.0.0.0/16"
 }
@@ -28,15 +28,13 @@ variable "private-subnet-cidr-block" {
 }
 
 variable "ff-tags" {
-    Description = "Freeform tags to apply to resources"
-    type = list(object({
+    description = "Freeform tags to apply to resources"
+    type = object({
         app = string,
         cost = string
-    }))
-    default = [
-        {
+    })
+    default = {
             app = "kubernetes"
             cost = "always-free"
         }
-    ]
 }
