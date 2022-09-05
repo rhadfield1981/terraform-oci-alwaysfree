@@ -10,3 +10,13 @@ resource "oci_identity_compartment" "kube-compartment" {
     name = "${var.compartment-name}"
 }
 
+module "networking" {
+    source = "./modules/networking"
+
+    #Use defaults in modules/networking/variables.tf or provide new values below
+    #display-name = 
+    #vcn-cidr-block=
+    #public-subnet-cidr-block=
+    #private-subnet-cidr-block=
+    #ff-tags=
+}
