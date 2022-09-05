@@ -13,6 +13,7 @@ resource "oci_identity_compartment" "kube-compartment" {
 module "networking" {
     source = "./modules/networking"
 
+    compartment-id = oci_identity_compartment.kube-compartment.id
     #Use defaults in modules/networking/variables.tf or provide new values below
     #display-name = 
     #vcn-cidr-block=
