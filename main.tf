@@ -24,3 +24,9 @@ module "networking" {
     #private-subnet-cidr-block=
     #ff-tags=
 }
+
+module "compute" {
+    source = "./modules/compute"
+
+    compartment-id = oci_identity_compartment.kube-compartment.id
+}
