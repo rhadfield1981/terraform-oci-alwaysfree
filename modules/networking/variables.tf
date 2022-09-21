@@ -38,3 +38,43 @@ variable "ff-tags" {
             cost = "always-free"
         }
 }
+
+variable "sl-display-name" {
+    description = "Human readable name for the security list"
+    type = string
+    default = "Kubernetes"
+}
+
+variable "priv-security-list-rules" {
+    description = "Map of objects for defining private security list ingress/egress rules"
+    type = map(object({
+        egress_rules = map(object({
+            destination = string
+            max-port = number
+            min-port = number
+        }))
+        ingress_rules = map(object({
+            source = string
+            max-port = number
+            min-port = number
+        }))
+    }))
+}
+
+variable "pub-security-list-rules" {
+    description = "Map of objects for defining public security list ingress/egress rules"
+    type = map(object({
+        egress_rules = map(object({
+            destination = string
+            max-port = number
+            min-port = number
+        }))
+        ingress_rules = map(object({
+            source = string
+            max-port = number
+            min-port = number
+        }))
+    }))
+}
+
+
