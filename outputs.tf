@@ -22,3 +22,8 @@ output "compute-shapes-name" {
     description = "Compute shapes available to host os Image"
     value = module.compute.compute-shape.shapes[0].name
 }
+
+output "availability-domains" {
+    description = "Availability Domains available"
+    value= module.compute.availability-domains.availability_domains
+}

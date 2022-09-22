@@ -8,3 +8,8 @@ output "compute-shape" {
     value = data.oci_core_shapes.compute-shapes
 
 }
+
+output "availability-domains" {
+    description = "Availability Domains available"
+    value= data.oci_identity_availability_domains.availability-domains
+}

@@ -29,4 +29,5 @@ module "compute" {
     source = "./modules/compute"
 
     compartment-id = oci_identity_compartment.kube-compartment.id
+    private-subnet-id = module.networking.private-subnet-id
 }

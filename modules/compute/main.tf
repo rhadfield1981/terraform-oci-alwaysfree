@@ -19,22 +19,31 @@ data "oci_core_shapes" "compute-shapes" {
   
 }
 
-data "oci_identity_availability_domain" "availability-domains" {
+data "oci_identity_availability_domains" "availability-domains" {
     compartment_id = var.compartment-id
+}
+
+resource "tls_private_key" "kubernetes-ssh-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 resource "oci_core_instance" "mysql-k3s" {
     compartment_id = var.compartment-id
     shape = data.oci_core_shapes.compute-shapes.shapes[0].name
-    availability_domain=data.oci_identity_availability_domain.availability-domains[0].id
+    availability_domain=data.oci_identity_availability_domains.availability-domains.availability_domains[0].name
     display_name = "mysql-k3s"
-    freeform_tags =  { "app"= var.ff-tags.app, "cost"= var.ff-tags.cost }
-    shape_config {
-
+    create_vnic_details {
+      subnet_id = var.private-subnet-id
+      assign_public_ip = "false"
     }
+    freeform_tags =  { "app"= var.ff-tags.app, "cost"= var.ff-tags.cost }
     source_details {
-      source_id = data.oci_core_images.ubuntu-images.
+      source_id = data.oci_core_images.ubuntu-images.images[0].id
       source_type="image"
+    }
+    metadata = {
+      ssh_authorized_keys = tls_private_key.kubernetes-ssh-key.public_key_openssh
     }
 }
 
