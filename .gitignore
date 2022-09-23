@@ -5,6 +5,7 @@ crash.log
 crash.*.log
 *.tfvars
 *.terraform.lock.hcl
+providers.tf
 remote-state-infra/**/.terraform/*
 remote-state-infra/*.tfstate
 remote-state-infra/*.tfstate.*
@@ -12,3 +13,4 @@ remote-state-infra/crash.log
 remote-state-infra/crash.*.log
 remote-state-infra/*.tfvars
 remote-state-infra/*.terraform.lock.hcl
+remote-state-infra/providers.tf
