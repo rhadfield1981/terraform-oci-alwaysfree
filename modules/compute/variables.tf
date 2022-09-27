@@ -1,11 +1,15 @@
-variable compartment-id {
+variable "compartment-id" {
     description = "Compartment to host compute"
     type = string
 }
 
-variable private-subnet-id {
-    description = "Private subnet id for non public instances"
-    type = string
+variable "instances" {
+    description = "Map of objects defining compute instances"
+    type = map(object({
+        subnet-id = string
+        billing-type = string
+        assign-public-ip = bool
+    }))
 }
 
 variable "ff-tags" {

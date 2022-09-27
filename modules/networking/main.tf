@@ -21,6 +21,7 @@ resource "oci_core_route_table" "rt" {
     }
 }
 
+
 resource "oci_core_internet_gateway" "igw" {
     compartment_id = var.compartment-id
     vcn_id = oci_core_vcn.vcn.id
@@ -137,5 +138,23 @@ resource "oci_core_security_list" "public-sl" {
         min = ingress_security_rules.value["min-port"]
       }        
     }
+  }
+}
+
+data "oci_load_balancer_shapes" "lb-shapes" {
+  compartment_id = var.compartment-id
+}
+
+#Create a node balancer so that we can expose our pods
+resource "oci_load_balancer_load_balancer" "k8s-lb" {
+  compartment_id = var.compartment-id
+  display_name =  join("-",[var.display-name, "lb"])
+  ##OCI Always free provides a single flexible load balancer of up to 10Mbps https://www.oracle.com/cloud/free/#always-free
+  shape = "flexible"
+  is_private = false
+  subnet_ids = [oci_core_subnet.public-subnet.id]
+  shape_details {
+    maximum_bandwidth_in_mbps = 10
+    minimum_bandwidth_in_mbps = 10
   }
 }

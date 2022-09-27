@@ -12,3 +12,4 @@ output "private-subnet-id" {
     description ="Private subnet id for use in other modules"
     value = oci_core_subnet.private-subnet.id
 }
+

@@ -3,9 +3,15 @@ output "os-image-id" {
     value = data.oci_core_images.ubuntu-images.images[0].id
 }
 
-output "compute-shape" {
+output "limited-free-compute-shapes" {
     description = "Shapes available to host the OS image"
-    value = data.oci_core_shapes.compute-shapes
+    value = data.oci_core_shapes.limited-free-compute-shapes
+
+}
+
+output "always-free-compute-shapes" {
+    description = "Shapes available to host the OS image"
+    value = data.oci_core_shapes.always-free-compute-shapes
 
 }
 

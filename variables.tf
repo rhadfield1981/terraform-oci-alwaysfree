@@ -4,16 +4,6 @@ variable "region" {
     default = "uk-london-1"
 }
 
-variable "s3-backend-bucket-name" {
-    type = string
-    description = "Name for the terraform state storage bucket"
-}
-
-variable "bucket-endpoint" {
-    type = string
-    description = "Endpoint for the OCI terraform state Bucket"
-}
-
 variable "compartment-description" {
     type = string
     description = "Text describing the purpose of the compartment"

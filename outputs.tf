@@ -13,14 +13,14 @@ output "os-images" {
     value = module.compute.os-image-id
 }
 
-output "compute-shapes-billing" {
-    description = "Compute shapes available to host os Image - billing Info"
-    value = module.compute.compute-shape.shapes[0].billing_type
+output "a1-compute-shapes" {
+    description = "Compute shapes available"
+    value = module.compute.limited-free-compute-shapes.shapes[0]
 }
 
-output "compute-shapes-name" {
+output "e2-compute-shapes" {
     description = "Compute shapes available to host os Image"
-    value = module.compute.compute-shape.shapes[0].name
+    value = module.compute.always-free-compute-shapes.shapes[0]
 }
 
 output "availability-domains" {
@@ -38,3 +38,4 @@ output "public-key" {
     description = "Public key for compute instances, useful for debugging, not intended for any production environment"
     value = module.compute.public-key
 }
+
