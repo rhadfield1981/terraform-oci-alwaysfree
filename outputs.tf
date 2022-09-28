@@ -23,11 +23,6 @@ output "e2-compute-shapes" {
     value = module.compute.always-free-compute-shapes.shapes[0]
 }
 
-output "availability-domains" {
-    description = "Availability Domains available"
-    value= module.compute.availability-domains.availability_domains
-}
-
 output "private-key" {
     description = "Private key to connect to compute instances.  This is not secure and should be ported to terraform vault at a later date"
     value = module.compute.private-key
@@ -38,4 +33,15 @@ output "public-key" {
     description = "Public key for compute instances, useful for debugging, not intended for any production environment"
     value = module.compute.public-key
 }
+
+output "compute-hosts" {
+    description = "Values for compute hosts file"
+    value = module.compute.compute-hosts
+}
+
+output "public-hosts" {
+    description = "All public compute ips"
+    value = module.compute.public-compute
+}
+
 

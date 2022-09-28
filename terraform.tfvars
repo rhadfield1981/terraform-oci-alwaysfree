@@ -75,6 +75,11 @@ pub-security-list-rules = {
                 max-port = 443
                 min-port = 443
             }
+            "ssh" = {
+                source = "0.0.0.0/0"
+                max-port = 22
+                min-port = 22
+            }
         }
     }
 }
