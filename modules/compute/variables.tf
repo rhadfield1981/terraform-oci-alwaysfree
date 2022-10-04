@@ -6,10 +6,17 @@ variable "compartment-id" {
 variable "instances" {
     description = "Map of objects defining compute instances"
     type = map(object({
-        subnet-id = string
         billing-type = string
         assign-public-ip = bool
     }))
+}
+
+variable "private-subnet-id" {
+    type= string
+}
+
+variable "public-subnet-id" {
+    type= string
 }
 
 variable "ff-tags" {

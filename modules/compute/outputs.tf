@@ -31,7 +31,7 @@ output "compute-hosts" {
     value = zipmap([for instance in oci_core_instance.instance : instance.private_ip ], [for instance in oci_core_instance.instance : instance.display_name ])
 }
 
-output "public-compute" {
+output "public-hosts" {
     description = "All compute details"
-    value = zipmap([for instance in oci_core_instance.instance : instance.public_ip if instance.public_ip != "" ], [for instance in oci_core_instance.instance : instance.display_name if instance.create_vnic_details[0].assign_public_ip != "false" ])
+    value = zipmap([for instance in oci_core_instance.instance : instance.display_name if instance.create_vnic_details[0].assign_public_ip != "false" ], [for instance in oci_core_instance.instance : join(": ", ["ansible_host",instance.public_ip]) if instance.public_ip != "" ]) 
 }

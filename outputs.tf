@@ -41,7 +41,7 @@ output "compute-hosts" {
 
 output "public-hosts" {
     description = "All public compute ips"
-    value = module.compute.public-compute
+    value = module.compute.public-hosts
 }
 
 

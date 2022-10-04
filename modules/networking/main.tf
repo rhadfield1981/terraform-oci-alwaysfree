@@ -9,9 +9,9 @@ resource "oci_core_vcn" "vcn" {
 
 }
 
-resource "oci_core_route_table" "rt" {
+resource "oci_core_default_route_table" "rt" {
     compartment_id = var.compartment-id
-    vcn_id = oci_core_vcn.vcn.id
+    manage_default_resource_id = oci_core_vcn.vcn.default_route_table_id
 
     display_name = join("-", [var.display-name, "rt"])
     freeform_tags = { "app"= var.ff-tags.app, "cost"= var.ff-tags.cost }
@@ -39,15 +39,15 @@ resource "oci_core_subnet" "public-subnet" {
     dns_label = "public"
     prohibit_public_ip_on_vnic = false
     prohibit_internet_ingress = false
-    security_list_ids = [oci_core_security_list.public-sl.id]
+    security_list_ids = [oci_core_security_list.public-sl.id, oci_core_vcn.vcn.default_security_list_id]
     freeform_tags = { "app"= var.ff-tags.app, "cost"= var.ff-tags.cost }
 
 }
 
-resource "oci_core_route_table_attachment" "rta" {
-    subnet_id = oci_core_subnet.public-subnet.id
-    route_table_id = oci_core_route_table.rt.id
-} 
+#resource "oci_core_route_table_attachment" "rta" {
+#    subnet_id = oci_core_subnet.public-subnet.id
+#    route_table_id = oci_core_route_table.rt.id
+#} 
 
 resource "oci_core_subnet" "private-subnet" {
 compartment_id = var.compartment-id
@@ -58,7 +58,7 @@ compartment_id = var.compartment-id
     dns_label = "private"
     prohibit_public_ip_on_vnic = true
     prohibit_internet_ingress = true
-    security_list_ids = [oci_core_security_list.private-sl.id]
+    security_list_ids = [oci_core_security_list.private-sl.id, oci_core_vcn.vcn.default_security_list_id]
     freeform_tags = { "app"= var.ff-tags.app, "cost"= var.ff-tags.cost }
 }
 

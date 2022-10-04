@@ -29,39 +29,36 @@ module "compute" {
     source = "./modules/compute"
 
     compartment-id = oci_identity_compartment.kube-compartment.id
+    public-subnet-id = module.networking.public-subnet-id
+    private-subnet-id = module.networking.private-subnet-id
     instances = {
         # Source article suggests installing these instances, however they do not appear to be used
         # Also we hit our always free storage limit of 200GB with more than 4 instances
         #mysql-k3s = {
-        #    subnet-id = module.networking.private-subnet-id
         #    billing-type = "ALWAYS_FREE"
         #    assign-public-ip = "false"
         #}
         #rabbitmq = {
-        #    subnet-id = module.networking.private-subnet-id
         #    billing-type = "ALWAYS_FREE"
         #    assign-public-ip = "false"
         #}
         control-plane-01 = {
-            subnet-id = module.networking.public-subnet-id
-            billing-type = "LIMITED_FREE"
-            assign-public-ip = "true"
-        }
-        control-plane-02 = {
-            subnet-id = module.networking.public-subnet-id
             billing-type = "LIMITED_FREE"
             assign-public-ip = "true"
         }
         worker-node-01 = {
-            subnet-id = module.networking.private-subnet-id
             billing-type = "LIMITED_FREE"
-            assign-public-ip = "false"
+            assign-public-ip = "true"
         }
         worker-node-02 = {
-            subnet-id = module.networking.private-subnet-id
             billing-type = "LIMITED_FREE"
-            assign-public-ip = "false"
+            assign-public-ip = "true"
         }
+        worker-node-03 = {
+            billing-type = "LIMITED_FREE"
+            assign-public-ip = "true"
+        }
+
 
     }
     
