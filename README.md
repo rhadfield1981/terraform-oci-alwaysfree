@@ -10,6 +10,7 @@ This architecture is based on the article found [here](https://medium.com/geekcu
 * All compute instances have been hosted in the public subnet, however we create both a public and private subnet.  
 * Feel free to modify the project to distribute compute between both subnets, some manual configuration will be required on the private instances as the associated ansible scripts only access instances with public IPs at present.
 * To make best use of the limited resources available to us K3S has been used to implement our kubernetes cluster, this is the same implementation used by Rancher Desktop.
+* Compute instances are ARM based so this will affect the pods that can be run on the resulting cluster.
 
 ## Remote State
 This project is configured to make use of the remote state configured in the project **remote-state-infra**  please run this project first.
