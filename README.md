@@ -45,6 +45,8 @@ Prevent the ssh warning when connecting to a new host in ansible.
 Change to ansible directory.
 11. `ansible-playbook -i inventory.yaml kubernetes-setup-playbook.yaml`  
 Run the ansible playbook to configure k3s on the compute nodes.
+12. `ssh -i ~/.oci/oci_api_key.pem ubuntu@control-plane-01`  
+SSH to the control plane and access kubernetes cluster.
 <br/>
 
 ### Why Oracle Cloud?  
