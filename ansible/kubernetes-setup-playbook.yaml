@@ -1,0 +1,123 @@
+---
+- name: Configure Nodes
+  hosts: control_plane, workers
+  remote_user: ubuntu
+  vars: 
+    ansible_ssh_private_key_file: ~/.oci/oci_api_key.pem
+  tasks:
+    - name: Copy kubernetes_hosts.tmp to destination
+      ansible.builtin.copy:
+        src: ./resources/kubernetes-hosts.tmp
+        dest: /tmp/kubernetes-hosts.tmp
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Copy kubernetes_hosts.tmp to destination
+      ansible.builtin.copy:
+        src: ./resources/update_firewall_rules.sh
+        dest: /tmp/update_firewall_rules.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0750'
+   
+    - name: Update Hosts
+      become: yes
+      become_user: root
+      shell: "cat /tmp/kubernetes-hosts.tmp | tee -a /etc/hosts"
+ 
+    - name: Remove IPTables
+      become: yes
+      become_user: root
+      ansible.builtin.apt:
+        name: iptables
+        state: absent
+
+    - name: Remove UFW
+      become: yes
+      become_user: root
+      ansible.builtin.apt:
+        name: ufw
+        state: absent
+
+    - name: Install firewalld
+      become: yes
+      become_user: root
+      ansible.builtin.apt:
+        name: firewalld
+        state: present
+        update_cache: yes
+
+    - name: Get k3s install script 
+      get_url:
+        url: https://get.k3s.io 
+        dest: /tmp/installk3s.sh
+
+    - name: Change permissions
+      file: 
+        path: /tmp/installk3s.sh
+        mode: 0750
+
+    - name: Change firewall rules
+      become: yes
+      become_user: root
+      shell: /tmp/update_firewall_rules.sh
+
+- name: Configure Control Plane
+  hosts: control_plane
+  remote_user: ubuntu
+  vars: 
+    ansible_ssh_private_key_file: ~/.oci/oci_api_key.pem
+  tasks:
+    - name: Copy ssh key to destination
+      ansible.builtin.copy:
+        src: ~/.oci/oci_api_key.pem
+        dest: /tmp/oci_api_key.pem
+        owner: ubuntu
+        group: ubuntu
+        mode: '0600'
+
+    - name: Install k3s
+      become: yes
+      become_user: root
+      command: /tmp/installk3s.sh - server
+   
+    - name: Copy .kube
+      become: yes
+      become_user: root
+      ansible.builtin.copy:
+        remote_src: yes
+        src: ~/.kube
+        dest: /home/ubuntu/.kube
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Change k3s.yaml permissions
+      file:
+        path: /etc/rancher/k3s/k3s.yaml
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Get node-token
+      become: yes
+      become_user: root
+      command: /bin/cat /var/lib/rancher/k3s/server/node-token
+      register: nodetoken
+
+- name: Configure Workers
+  hosts: workers
+  remote_user: ubuntu
+  vars:
+    ansible_ssh_private_key_file: ~/.oci/oci_api_key.pem
+  tasks:
+    - name: Install dnsmasq
+      become: yes
+      become_user: root
+      ansible.builtin.apt:
+        name: dnsmasq-base
+        state: present
+
+    - name: Run Install
+      become: yes
+      become_user: root
+      shell: " curl -sfL https://get.k3s.io | K3S_URL=https://control-plane-01:6443 K3S_TOKEN={{ hostvars['control-plane-01']['nodetoken']['stdout'] }} sh - "
